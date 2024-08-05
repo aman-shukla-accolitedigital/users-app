@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React , { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const DataTable = () => {
@@ -13,7 +13,7 @@ const DataTable = () => {
         const response = await axios.get('https://jsonplaceholder.typicode.com/users');
         setData(response.data);
         setLoading(false);
-      } catch (error: any) {
+      } catch (error) {
         if (axios.isAxiosError(error)) {
           setError(error.message);
         } else {

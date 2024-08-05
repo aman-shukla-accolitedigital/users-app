@@ -46,7 +46,21 @@ jobs:
           root: ~/artifacts
           paths:
             - .
-
+  testing:
+    executor: node/default
+    working_directory: ~/project/api-vite
+    steps:
+      - attach_workspace:
+          at: ~/project/api-vite
+      - run:
+          name: Run tests
+          command: npx jest --ci --runInBand --reporters=default --reporters=jest-junit 
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./reports/
+            JEST_JUNIT_ADD_FILE_ATTRIBUTE: "true"
+      - store_test_results:
+          path: ./reports/
+  
   deploy:
     # This is an example deploy job, not actually used by the workflow
     docker:
@@ -76,6 +90,9 @@ workflows:
     jobs:
       - checkout_and_install
       - build-node:
+          requires:
+            - checkout_and_install
+      - testing:
           requires:
             - checkout_and_install
       - deploy:
