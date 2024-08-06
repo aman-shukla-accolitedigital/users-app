@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="1" failures="0" errors="0" time="1.321">
-  <testsuite name="acc-api" errors="0" failures="0" skipped="0" timestamp="2024-08-05T17:50:16" time="0.388" tests="1">
-    <testcase classname="acc-api placeholder test that always passes" name="acc-api placeholder test that always passes" time="0.003">
+<testsuites name="jest tests" tests="1" failures="0" errors="0" time="0.731">
+  <testsuite name="acc-api" errors="0" failures="0" skipped="0" timestamp="2024-08-06T07:10:50" time="0.576" tests="1">
+    <testcase classname="acc-api placeholder test that always passes" name="acc-api placeholder test that always passes" time="0.002">
     </testcase>
   </testsuite>
 </testsuites>
