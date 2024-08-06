@@ -2,8 +2,6 @@ version: 2.1
 orbs:
   node: circleci/node@5
   aws-s3: circleci/aws-s3@3.1.1
-  # aws-s3: circleci/aws-s3@4.0.0 # use the AWS S3 orb in your configuration
-  # aws-cli: circleci/aws-cli@4.1.3
 
 jobs:
   checkout_and_install:
@@ -46,12 +44,12 @@ jobs:
           root: ~/artifacts
           paths:
             - .
-  testing:
+  run-test:
     executor: node/default
-    working_directory: ~/project/api-vite
+    working_directory: ~/project
     steps:
       - attach_workspace:
-          at: ~/project/api-vite
+          at: ~/project
       - run:
           name: Run tests
           command: npx jest --ci --runInBand --reporters=default --reporters=jest-junit 
@@ -61,25 +59,17 @@ jobs:
       - store_test_results:
           path: ./reports/
   
-  deploy:
+  deploy-s3:
     # This is an example deploy job, not actually used by the workflow
     docker:
       - image: cimg/base:stable
        
     steps:
       - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: ~/project
       - run:
           name: List Directory
           command: ls -al
-      # - run:
-      #     name: Configure AWS CLI
-          # command: |
-          #   echo "[default]" > ~/.aws/credentials
-          #   echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
-          #   echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
-          #   aws configure set region us-east-1
     
       - aws-s3/sync:
           from: dist
@@ -92,10 +82,10 @@ workflows:
       - build-node:
           requires:
             - checkout_and_install
-      - testing:
+      - run-test:
           requires:
             - checkout_and_install
-      - deploy:
+      - deploy-s3:
           requires:
             - build-node # Only run deploy job once the build job has completed
           filters:
